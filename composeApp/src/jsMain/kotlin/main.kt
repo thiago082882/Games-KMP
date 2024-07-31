@@ -20,7 +20,7 @@ import viewmodel.HomeViewModel
 fun main() {
 
     onWasmReady {
-        CanvasBasedWindow("KmpApp2") {
+        CanvasBasedWindow("gamelist") {
             CompositionLocalProvider(
                 LocalImageLoader provides remember { generateImageLoader() },
             ) {

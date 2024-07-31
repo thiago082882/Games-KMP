@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
 //    kotlin("plugin.serialization") version "1.9.21"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.21"
+    id("app.cash.sqldelight") version "2.0.1"
 }
 
 kotlin {
@@ -42,6 +43,9 @@ kotlin {
         iosTarget.binaries.framework {
             baseName ="ComposeApp"
             isStatic = true
+
+            export("com.arkivanov.decompose:decompose:2.2.2-compose-experimental")
+            export("com.arkivanov.essenty:lifecycle:1.3.0")
         }
     }
 
@@ -51,8 +55,11 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+
+            //decompose step3
             implementation ("com.arkivanov.decompose:decompose:2.2.2-compose-experimental")
             implementation ("com.arkivanov.decompose:extensions-compose-jetbrains:2.2.2-compose-experimental")
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -85,19 +92,40 @@ kotlin {
 
             implementation ("com.arkivanov.decompose:decompose:2.2.2-compose-experimental")
             implementation ("com.arkivanov.decompose:extensions-compose-jetbrains:2.2.2-compose-experimental")
+
+            //koin step1
+            implementation("io.insert-koin:koin-core:3.5.3")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation("app.cash.sqldelight:sqlite-driver:2.0.1")
         }
 
         androidMain.dependencies {
             implementation(libs.ktor.client.android)
-        }
 
+            //koin step2
+            implementation("io.insert-koin:koin-android:3.5.3")
+
+            implementation("app.cash.sqldelight:android-driver:2.0.1")
+
+        }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            api("com.arkivanov.decompose:decompose:2.2.2-compose-experimental")
+            api("com.arkivanov.essenty:lifecycle:1.3.0")
+
+            implementation("app.cash.sqldelight:native-driver:2.0.1")
         }
 
+        jsMain.dependencies {
+
+
+            implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.0.1"))
+            implementation(npm("sql.js", "1.8.0"))
+            implementation("app.cash.sqldelight:web-worker-driver:2.0.1")
+            implementation(devNpm("copy-webpack-plugin", "9.1.0"))
+        }
 
     }
 }
@@ -134,6 +162,9 @@ android {
         debugImplementation(libs.compose.ui.tooling)
     }
 }
+dependencies {
+    implementation(libs.androidx.palette.ktx)
+}
 
 compose.desktop {
     application {
@@ -148,4 +179,14 @@ compose.desktop {
 //Step3
 compose.experimental {
     web.application {}
+}
+
+//sqldelight step2
+sqldelight {
+    databases {
+        create("AppDatabase") {
+            packageName.set("org.thiago.gamelist")
+            generateAsync.set(true)
+        }
+    }
 }

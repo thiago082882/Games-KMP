@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
 class HomeRepository {
 
     suspend fun getGamesApi(): List<Games> {
-        val response = httpClient.get("http://10.0.0.134:8080/games")
+        val response = httpClient.get("http://10.0.0.118:8080/games")
         return response.body()
     }
 

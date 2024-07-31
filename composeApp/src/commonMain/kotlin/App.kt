@@ -32,7 +32,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SearchBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -42,8 +46,6 @@ import com.seiko.imageloader.rememberImagePainter
 import data.models.Games
 import kotlinx.coroutines.launch
 import list.ListComponent
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,6 +64,11 @@ fun AppContent(games: State<ListComponent.Model>, onItemClicked: (Games) -> Unit
 
         val scrollState = rememberLazyGridState()
         val coroutineScope = rememberCoroutineScope()
+
+        var query by remember { mutableStateOf("") }
+        val filteredGames = games.value.items.filter {
+            it.title?.contains(query, ignoreCase = true) ?: false
+        }
 
         Column(
             verticalArrangement = Arrangement.Center,
@@ -86,10 +93,10 @@ fun AppContent(games: State<ListComponent.Model>, onItemClicked: (Games) -> Unit
                     Column {
                         SearchBar(
                             modifier = Modifier.fillMaxWidth(),
-                            query = "",
+                            query = query,
                             active = false,
                             onActiveChange = {},
-                            onQueryChange = {},
+                            onQueryChange = { newQuery -> query = newQuery },
                             onSearch = {},
                             leadingIcon = {
                                 Icon(
@@ -104,9 +111,8 @@ fun AppContent(games: State<ListComponent.Model>, onItemClicked: (Games) -> Unit
 
                 }
 
-
                 items(
-                    items = games.value.items,
+                    items = filteredGames,
                     key = { game -> game.id.toString() }) { game ->
 
                     Card(
