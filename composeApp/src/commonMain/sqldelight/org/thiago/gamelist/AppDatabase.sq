@@ -1,0 +1,15 @@
+CREATE TABLE Game (
+    id INTEGER PRIMARY KEY NOT NULL,
+    title TEXT NOT NULL,
+    image TEXT NOT NULL,
+    description TEXT
+);
+
+insertGames:
+INSERT INTO Game(id, title, image,description) VALUES(?,?,?,?);
+
+removeAllGames:
+DELETE FROM Game;
+
+selectAllGames:
+SELECT Game.* FROM Game;

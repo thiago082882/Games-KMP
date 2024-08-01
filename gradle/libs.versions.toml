@@ -20,7 +20,7 @@ kotlinxCoroutinesCore = "1.7.3"
 kotlinxSerializationJson = "1.6.2"
 ktorClientContentNegotiation = "2.3.5"
 mvvmCore = "0.16.1"
-paletteKtx = "1.0.0"
+
 
 [libraries]
 image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "imageLoader" }
@@ -47,7 +47,6 @@ ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorCli
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktorClientContentNegotiation" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientContentNegotiation" }
 mvvm-core = { module = "dev.icerock.moko:mvvm-core", version.ref = "mvvmCore" }
-androidx-palette-ktx = { group = "androidx.palette", name = "palette-ktx", version.ref = "paletteKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

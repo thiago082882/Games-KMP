@@ -1,20 +1,19 @@
 package viewmodel
 
 import data.models.Games
-import repository.HomeRepository
-import data.models.GamesItem
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import repository.HomeRepository
 
-class HomeViewModel  : ViewModel(){
+class HomeViewModel(
+    private val homeRepository : HomeRepository
+): ViewModel(){
 
     private  val _games = MutableStateFlow<List<Games>>(listOf())
     val games = _games.asStateFlow()
-
-    private val homeRepository = HomeRepository()
 
 
     init {

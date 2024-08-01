@@ -162,9 +162,7 @@ android {
         debugImplementation(libs.compose.ui.tooling)
     }
 }
-dependencies {
-    implementation(libs.androidx.palette.ktx)
-}
+
 
 compose.desktop {
     application {

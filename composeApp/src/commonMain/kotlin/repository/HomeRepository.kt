@@ -1,21 +1,30 @@
 package repository
 
-import apiClient.httpClient
 import data.models.Games
-import io.ktor.client.call.body
-import io.ktor.client.request.get
+import database.datasource.GamesLocalDataSource
+import database.datasource.GamesRemoteDataSource
 import kotlinx.coroutines.flow.flow
 
-class HomeRepository {
+class HomeRepository(
+    private val gamesLocalDataSource: GamesLocalDataSource,
+    private val gamesRemoteDataSource: GamesRemoteDataSource
+) {
 
-    suspend fun getGamesApi(): List<Games> {
-        val response = httpClient.get("http://10.0.0.118:8080/games")
-        return response.body()
+    private suspend fun getAllGames(forceReload: Boolean = false): List<Games> {
+        val cachedItems = gamesLocalDataSource.getAllGames()
+        return if(cachedItems.isNotEmpty() && !forceReload) {
+            println("fromCache")
+            cachedItems
+        } else {
+            println("fromNetwork")
+           gamesRemoteDataSource.getAllGames().also {
+                gamesLocalDataSource.clearDb()
+               gamesLocalDataSource.saveGames(it)
+            }
+        }
     }
 
-
-    fun getGames() = flow {
-        emit(getGamesApi())
+    fun getGames(forceReload: Boolean = false) = flow {
+        emit(getAllGames(forceReload))
     }
-
 }
